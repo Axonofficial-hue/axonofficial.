@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090610">
+<title>AXON | Esports Tournament</title>
+
+<style>
+:root {
+  --bg: #090610;
+  --card: #151020;
+  --purple: #a855f7;
+  --purple-dark: #7c3aed;
+  --white: #ffffff;
+  --muted: #b8adc7;
+  --border: #342344;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: Arial, sans-serif;
+  padding-bottom: 78px;
+}
+
+button, a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #100a19;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+/* A-symbol ka size yahan control hoga */
+.brand-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* AXON text bada rahega */
+.brand-name {
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #fff;
+}
+
+.brand-subtitle {
+  color: var(--purple);
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+
+.help-btn {
+  padding: 9px 14px;
+  color: white;
+  background: #21142f;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #21112f;
+  padding: 10px 0;
+  color: #e9d5ff;
+  font-size: 13px;
+}
+
+.ticker-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: tickerScroll 20s linear infinite;
+}
+
+@keyframes tickerScroll {
+  to { transform: translateX(-100%); }
+}
+
+.container {
+  max-width: 760px;
+  padding: 16px;
+  margin: auto;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.banner-box {
+  overflow: hidden;
+  background: #171020;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.banner {
+  display: none;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+}
+
+.banner.active {
+  display: block;
+}
+
+.banner-fallback {
+  display: none;
+  min-height: 150px;
+  padding: 30px 15px;
+  text-align: center;
+  background: linear-gradient(135deg, #32164c, #090610);
+}
+
+.banner-fallback h2 {
+  color: var(--purple);
+  margin-bottom: 10px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: #655570;
+}
+
+.dot.active {
+  width: 21px;
+  border-radius: 10px;
+  background: var(--purple);
+}
+
+.section-title {
+  font-size: 21px;
+  font-weight: 900;
+  margin: 24px 0 14px;
+}
+
+.section-title span {
+  color: var(--purple);
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mode-card {
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+  color: white;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color .2s;
+}
+
+.mode-card:hover {
+  border-color: var(--purple);
+}
+
+.mode-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #21172d;
+}
+
+.mode-info {
+  padding: 12px;
+}
+
+/* Game mode names ab pehle se bade hain */
+.mode-info h3 {
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.mode-info p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.socials {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.social-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 84px;
+  text-decoration: none;
+  color: white;
+  background: #171123;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.social-btn svg {
+  display: block;
+  width: 29px;
+  height: 29px;
+  fill: currentColor;
+}
+
+.telegram { color: #35a9e8; }
+.whatsapp { color: #25d366; }
+.instagram { color: #e879f9; }
+
+.info-card {
+  padding: 17px;
+  margin-top: 15px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.back-btn {
+  margin: 5px 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 13px;
+  background: #21142f;
+  color: white;
+}
+
+.match-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.match-tab {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #171123;
+  color: white;
+  padding: 10px 4px;
+}
+
+.match-tab.active {
+  background: var(--purple-dark);
+  border-color: var(--purple);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 35px 15px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.empty-state h3 {
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 10px 5px max(10px, env(safe-area-inset-bottom));
+  background: #100a19;
+  border-top: 1px solid var(--border);
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 5px;
+}
+
+.nav-btn span {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.nav-btn.active {
+  color: var(--purple);
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  color: #8e829d;
+  font-size: 11px;
+  padding: 25px 10px;
+}
+
+@media (max-width: 360px) {
+  .brand-name {
+    font-size: 23px;
+    letter-spacing: 3px;
+  }
+
+  .mode-info h3 {
+    font-size: 15px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <img
+      src="Logo.png"
+      class="brand-logo"
+      alt="AXON symbol"
+      onerror="this.style.display='none'"
+    >
+    <div>
+      <div class="brand-name">AXON</div>
+      <div class="brand-subtitle">ESPORTS TOURNAMENT</div>
+    </div>
+  </div>
+
+  <button class="help-btn" onclick="showPage('help')">Help ?</button>
+</header>
+
+<div class="ticker">
+  <div class="ticker-text" id="announcement">
+    🔥 Welcome to AXON Esports! &nbsp; | &nbsp;
+    Check upcoming tournaments and get ready to play!
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- HOME PAGE -->
+  <section class="page active" id="home">
+
+    <div class="banner-box">
+      <img
+        src="Banner1.png"
+        class="banner active"
+        alt="AXON banner 1"
+        onerror="this.style.display='none'; document.getElementById('bannerFallback').style.display='block'"
+      >
+
+      <img src="Banner2.png" class="banner" alt="AXON banner 2">
+      <img src="Banner3.png" class="banner" alt="AXON banner 3">
+
+      <div class="banner-fallback" id="bannerFallback">
+        <h2>AXON ESPORTS</h2>
+        <p>Join tournaments. Play to win.</p>
+      </div>
+
+      <div class="dots" id="sliderDots">
+        <button class="dot active" aria-label="Banner 1"></button>
+        <button class="dot" aria-label="Banner 2"></button>
+        <button class="dot" aria-label="Banner 3"></button>
+      </div>
+    </div>
+
+    <h2 class="section-title">CHOOSE YOUR <span>MODE</span></h2>
+
+    <div class="mode-grid">
+
+      <button class="mode-card" onclick="openMode('Battle Royale Full Map')">
+        <img class="mode-image" src="Full%20Map.png" alt="Full Map">
+        <div class="mode-info">
+          <h3>Full Map</h3>
+          <p>Solo • Duo • Squad</p>
+        </div>
+      </button>
+
+      <button class="mode-card" onclick="openMode('Clash Squad 4v4')">
+        <img class="mode-image" src="Clash%20Squad%204v4.png" alt="Clash Squad">
+        <div class="mode-info">
+          <h3>Clash Squad</h3>
+          <p>4 vs 4 Battles</p>
+        </div>
+      </button>
+
+      <button class="mode-card" onclick="openMode('Lone Wolf 1v1')">
+        <img class="mode-image" src="Lone%20Wolf%201v1.png" alt="Lone Wolf 1v1">
+        <div class="mode-info">
+          <h3>Lone Wolf 1v1</h3>
+          <p>One vs One</p>
+        </div>
+      </button>
+
+      <button class="mode-card" onclick="openMode('Only Head 1v1')">
+        <img class="mode-image" src="Only%20Head%201v1.png" alt="Only Head 1v1">
+        <div class="mode-info">
+          <h3>Only Head 1v1</h3>
+          <p>Headshot Challenge</p>
+        </div>
+      </button>
+
+      <button class="mode-card" onclick="openMode('Lone Wolf 2v2')">
+        <img class="mode-image" src="Lone%20Wolf%202v2.png" alt="Lone Wolf 2v2">
+        <div class="mode-info">
+          <h3>Lone Wolf 2v2</h3>
+          <p>Team Battle</p>
+        </div>
+      </button>
+
+      <button class="mode-card" onclick="openMode('Only Head 2v2')">
+        <img class="mode-image" src="Only%20Head%202v2.jpg" alt="Only Head 2v2">
+        <div class="mode-info">
+          <h3>Only Head 2v2</h3>
+          <p>Team Headshot Battle</p>
+        </div>
+      </button>
+
+      <button class="mode-card" onclick="openMode('Free Matches')">
+        <img class="mode-image" src="Free%20matches.jpg" alt="Free Matches">
+        <div class="mode-info">
+          <h3>Free Matches</h3>
+          <p>Play without entry fee</p>
+        </div>
+      </button>
+
+    </div>
+
+    <h2 class="section-title">JOIN OUR <span>COMMUNITY</span></h2>
+
+    <div class="socials">
+
+      <!-- Telegram icon -->
+      <a
+        class="social-btn telegram"
+        href="https://t.me/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Telegram"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.8 3.2a1.5 1.5 0 0 0-1.6-.3L2.7 9.6c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.2c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.2-2.1 4.6 3.4c.9.5 1.6.2 1.8-.9l3-13.9c.3-1.2-.2-1.8-.2-1.3zM8 12.2l9.9-6.2c.5-.3.9-.1.5.3l-8.2 7.4-.3 3.2z"/>
+        </svg>
+        Telegram
+      </a>
+
+      <!-- WhatsApp icon -->
+      <a
+        class="social-btn whatsapp"
+        href="https://www.whatsapp.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2a9.7 9.7 0 0 0-8.3 14.7L2.4 22l5.5-1.4A9.9 9.9 0 1 0 12 2zm0 17.9a8 8 0 0 1-4.1-1.1l-.3-.2-3.2.8.9-3.1-.2-.3A8 8 0 1 1 12 19.9zm4.4-6c-.2-.1-1.5-.8-1.8-.9-.2-.1-.4-.1-.5.1l-.8.9c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.2-2.8c-.2-.3.2-.3.7-1 .1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.9 4.4 3.9 1.6.6 2.2.7 3 .6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.2-.2-.3-.5-.4z"/>
+        </svg>
+        WhatsApp
+      </a>
+
+      <!-- Instagram icon -->
+      <a
+        class="social-btn instagram"
+        href="https://www.instagram.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.5-3a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/>
+        </svg>
+        Instagram
+      </a>
+
+    </div>
+
+    <footer>© 2026 AXON Esports. All rights reserved.</footer>
+  </section>
+
+  <!-- MATCHES PAGE -->
+  <section class="page" id="matches">
+    <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
+    <h2 class="section-title" id="modeTitle">UPCOMING <span>MATCHES</span></h2>
+
+    <div class="match-tabs">
+      <button class="match-tab active" onclick="selectTab(this,'Upcoming')">Upcoming</button>
+      <button class="match-tab" onclick="selectTab(this,'Live')">Live</button>
+      <button class="match-tab" onclick="selectTab(this,'Completed')">Completed</button>
+    </div>
+
+    <div class="empty-state">
+      <h3 id="matchStatusTitle">No Upcoming Matches</h3>
+      <p id="matchStatusText">
+        Matches will appear here when the tournament admin adds them.
+      </p>
+    </div>
+  </section>
+
+  <!-- MY MATCHES PAGE -->
+  <section class="page" id="myMatches">
+    <h2 class="section-title">MY <span>MATCHES</span></h2>
+    <div class="empty-state">
+      <h3>No Matches Yet</h3>
+      <p>Your registered tournaments will appear here after registration functionality is connected.</p>
+    </div>
+  </section>
+
+  <!-- PROFILE PAGE -->
+  <section class="page" id="profile">
+    <h2 class="section-title">MY <span>PROFILE</span></h2>
+    <div class="empty-state">
+      <h3>Welcome to AXON</h3>
+      <p>Player login, account details and match history will be added when the backend is connected.</p>
+    </div>
+  </section>
+
+  <!-- HELP PAGE -->
+  <section class="page" id="help">
+    <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
+    <h2 class="section-title">AXON <span>HELP</span></h2>
+    <div class="info-card">
+      <p><strong>How to Join a Match</strong></p>
+      <p>1. Home Page par apna game mode choose karo.</p>
+      <p>2. Upcoming Matches mein available tournament dekho.</p>
+      <p>3. Registration feature activate hone par match join kar sakoge.</p>
+      <p>4. Room details eligible players ko match se 15 minutes pehle milengi, jab ye feature backend se connect hoga.</p>
+      <br>
+      <p>For help, contact the AXON tournament team using the official social links.</p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="bottom-nav">
+  <button class="nav-btn active" data-page="home" onclick="showPage('home')">
+    <span>⌂</span>Home
+  </button>
+  <button class="nav-btn" data-page="myMatches" onclick="showPage('myMatches')">
+    <span>▣</span>My Matches
+  </button>
+  <button class="nav-btn" data-page="profile" onclick="showPage('profile')">
+    <span>◉</span>Profile
+  </button>
+</nav>
+
+<script>
+let currentBanner = 0;
+
+const banners = Array.from(document.querySelectorAll(".banner"));
+const dots = Array.from(document.querySelectorAll(".dot"));
+
+function showBanner(index) {
+  if (!banners.length) return;
+
+  currentBanner = index % banners.length;
+
+  banners.forEach((banner, i) => {
+    banner.classList.toggle("active", i === currentBanner);
+  });
+
+  dots.forEach((dot, i) => {
+    dot.classList.toggle("active", i === currentBanner);
+  });
+}
+
+dots.forEach((dot, index) => {
+  dot.addEventListener("click", () => showBanner(index));
+});
+
+if (banners.length > 1) {
+  setInterval(() => showBanner(currentBanner + 1), 4000);
+}
+
+function showPage(pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("active", page.id === pageId);
+  });
+
+  document.querySelectorAll(".nav-btn").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.page === pageId
+    );
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function openMode(modeName) {
+  document.getElementById("modeTitle").textContent = modeName + " — MATCHES";
+  document.getElementById("matchStatusTitle").textContent = "No Upcoming Matches";
+  document.getElementById("matchStatusText").textContent =
+    "Abhi is mode ke matches add nahi kiye gaye hain.";
+
+  document.querySelectorAll(".match-tab").forEach((tab, i) => {
+    tab.classList.toggle("active", i === 0);
+  });
+
+  showPage("matches");
+}
+
+function selectTab(button, status) {
+  document.querySelectorAll(".match-tab").forEach(tab => {
+    tab.classList.remove("active");
+  });
+
+  button.classList.add("active");
+
+  document.getElementById("matchStatusTitle").textContent =
+    "No " + status + " Matches";
+
+  document.getElementById("matchStatusText").textContent =
+    "Tournament admin ke matches add karne ke baad yahan dikhai denge.";
+}
+</script>
+
+</body>
+  </html>
