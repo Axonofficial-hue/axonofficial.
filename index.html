@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AXON Tournament App</title>
-    <style>
+
+  <style>
     * {
       margin: 0;
       padding: 0;
@@ -56,15 +57,14 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .logo {
-      font-size: 27px;
-      font-weight: 900;
-      letter-spacing: 3px;
-      color: var(--white);
+    .brand {
+      min-width: 0;
     }
 
-    .logo span {
-      color: var(--purple-light);
+    .axon-logo {
+      display: block;
+      max-width: 100%;
+      height: auto;
     }
 
     .tagline {
@@ -82,6 +82,28 @@
       padding: 7px 11px;
       font-size: 11px;
       font-weight: bold;
+    }
+
+    .announcement {
+      overflow: hidden;
+      white-space: nowrap;
+      background: #171126;
+      border-bottom: 1px solid #39265a;
+      padding: 9px 0;
+      color: var(--yellow);
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .announcement span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scrollAnnouncement 18s linear infinite;
+    }
+
+    @keyframes scrollAnnouncement {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
     }
 
     .page {
@@ -139,40 +161,14 @@
     .banner-slide {
       flex: 0 0 100%;
       height: 100%;
-      padding: 25px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background: linear-gradient(120deg, #34145e, #151526);
+      overflow: hidden;
     }
 
-    .banner-slide:nth-child(2) {
-      background: linear-gradient(120deg, #171b44, #42206c);
-    }
-
-    .banner-slide:nth-child(3) {
-      background: linear-gradient(120deg, #40200d, #191323);
-    }
-
-    .banner-label {
-      color: var(--yellow);
-      font-size: 10px;
-      font-weight: bold;
-      letter-spacing: 3px;
-      margin-bottom: 10px;
-    }
-
-    .banner-slide h2 {
-      font-size: 27px;
-      line-height: 1.15;
-      font-weight: 900;
-      margin-bottom: 8px;
-    }
-
-    .banner-slide p {
-      color: #d0cde0;
-      font-size: 12px;
-      line-height: 1.5;
+    .banner-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .banner-dots {
@@ -214,6 +210,7 @@
       border: 1px solid var(--border);
       color: var(--white);
       transition: 0.2s;
+      overflow: hidden;
     }
 
     .mode-card:active {
@@ -222,9 +219,11 @@
     }
 
     .mode-icon {
-      font-size: 28px;
       display: block;
-      margin-bottom: 13px;
+      width: 100%;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 10px;
     }
 
     .mode-name {
@@ -614,10 +613,6 @@
     }
 
     @media (max-width: 360px) {
-      .banner-slide h2 {
-        font-size: 23px;
-      }
-
       .mode-card {
         padding: 12px 9px;
       }
@@ -631,41 +626,45 @@
       }
     }
   </style>
-  </head>
+</head>
 <body>
 
 <div class="app">
 
+  <!-- HEADER -->
   <header class="topbar">
-    <div>
-      <div class="logo">AX<span>ON</span></div>
+    <div class="brand">
+      <img src="./Logo.png" alt="AXON Logo" class="axon-logo">
       <div class="tagline">FREE FIRE TOURNAMENTS</div>
     </div>
-    <div class="header-badge">🎮 ESPORTS</div>
+
+    <button class="header-badge" onclick="showPage('helpPage')">
+      ☎ HELP
+    </button>
   </header>
+
+  <!-- SCROLLING ANNOUNCEMENT -->
+  <div class="announcement">
+    <span>🔥 WELCOME TO AXON TOURNAMENTS • CHOOSE YOUR MODE • JOIN THE BATTLE • PLAY FAIR • 🔥</span>
+  </div>
 
   <!-- HOME PAGE -->
   <section id="homePage" class="page active">
 
+    <!-- BANNER SLIDER -->
     <div class="banner">
       <div class="banner-track" id="bannerTrack">
 
         <div class="banner-slide">
-          <div class="banner-label">WELCOME TO AXON</div>
-          <h2>YOUR GAME.<br>YOUR GLORY.</h2>
-          <p>Join tournaments, compete with players and show your skills.</p>
+          <img src="./Banner1.png" alt="AXON Tournament Banner 1">
         </div>
 
         <div class="banner-slide">
-          <div class="banner-label">PROVE YOUR SKILLS</div>
-          <h2>PLAY HARD.<br>WIN BIG.</h2>
-          <p>Explore different game modes and find your next match.</p>
+          <img src="./Banner2.png" alt="AXON Tournament Banner 2">
         </div>
 
         <div class="banner-slide">
-          <div class="banner-label">AXON ESPORTS</div>
-          <h2>READY TO<br>DOMINATE?</h2>
-          <p>Choose your mode and get ready for the battle.</p>
+          <img src="./Banner3.png" alt="AXON Tournament Banner 3">
         </div>
 
       </div>
@@ -678,7 +677,9 @@
     </div>
 
     <h2 class="section-title">Choose Your Mode</h2>
-    <p class="section-subtitle">Select a game mode to explore tournaments.</p>
+    <p class="section-subtitle">
+      Select a game mode to explore tournaments.
+    </p>
 
     <div class="mode-grid" id="homeModeGrid"></div>
 
@@ -693,19 +694,28 @@
   <section id="matchesPage" class="page">
 
     <div class="match-toolbar">
-      <button class="back-button" onclick="showPage('homePage')">← Home</button>
+      <button class="back-button" onclick="showPage('homePage')">
+        ← Home
+      </button>
       <span class="header-badge">AXON MATCHES</span>
     </div>
 
     <h2 class="section-title" id="matchesHeading">All Matches</h2>
-    <p class="section-subtitle">Explore available tournament information.</p>
+
+    <p class="section-subtitle">
+      Explore available tournament information.
+    </p>
 
     <div class="status-tabs">
       <button class="status-tab active"
-        onclick="selectStatus('Upcoming', this)">Upcoming</button>
+        onclick="selectStatus('Upcoming', this)">
+        Upcoming
+      </button>
 
       <button class="status-tab"
-        onclick="selectStatus('Completed', this)">Completed</button>
+        onclick="selectStatus('Completed', this)">
+        Completed
+      </button>
     </div>
 
     <div id="tournamentList" class="tournament-list"></div>
@@ -715,7 +725,9 @@
   <!-- TOURNAMENT DETAILS PAGE -->
   <section id="detailsPage" class="page">
 
-    <button class="back-button" onclick="backToMatches()">← Back to Matches</button>
+    <button class="back-button" onclick="backToMatches()">
+      ← Back to Matches
+    </button>
 
     <div id="tournamentDetails"></div>
 
@@ -725,12 +737,14 @@
   <section id="helpPage" class="page">
 
     <h2 class="section-title">Help & Support</h2>
+
     <p class="section-subtitle">
       Need help with tournaments? Contact us through your official social channels.
     </p>
 
     <div class="detail-panel">
       <h3>How to Join</h3>
+
       <ol class="rules-list">
         <li>Choose your preferred game mode.</li>
         <li>Open a tournament to view its details.</li>
@@ -748,25 +762,29 @@
 
     <div class="social-grid">
 
-      <a class="social-card" href="#" onclick="return openSocial('instagram')">
+      <a class="social-card" href="#"
+        onclick="return openSocial('instagram')">
         <div class="social-icon">📸</div>
         <h3>Instagram</h3>
         <p>Follow tournament updates</p>
       </a>
 
-      <a class="social-card" href="#" onclick="return openSocial('youtube')">
+      <a class="social-card" href="#"
+        onclick="return openSocial('youtube')">
         <div class="social-icon">▶️</div>
         <h3>YouTube</h3>
         <p>Watch gaming content</p>
       </a>
 
-      <a class="social-card" href="#" onclick="return openSocial('whatsapp')">
+      <a class="social-card" href="#"
+        onclick="return openSocial('whatsapp')">
         <div class="social-icon">💬</div>
         <h3>WhatsApp</h3>
         <p>Get tournament updates</p>
       </a>
 
-      <a class="social-card" href="#" onclick="return openSocial('telegram')">
+      <a class="social-card" href="#"
+        onclick="return openSocial('telegram')">
         <div class="social-icon">✈️</div>
         <h3>Telegram</h3>
         <p>Join the community</p>
@@ -776,6 +794,40 @@
 
     <div class="footer">
       AXON Tournament App
+    </div>
+
+  </section>
+
+  <!-- PROFILE PAGE -->
+  <section id="profilePage" class="page">
+
+    <h2 class="section-title">My Profile</h2>
+
+    <p class="section-subtitle">
+      Your AXON tournament profile.
+    </p>
+
+    <div class="detail-panel">
+      <h3>🎮 Player Information</h3>
+
+      <div class="detail-row">
+        <span>App</span>
+        <span>AXON</span>
+      </div>
+
+      <div class="detail-row">
+        <span>Account</span>
+        <span>Guest</span>
+      </div>
+
+      <div class="detail-row">
+        <span>My Matches</span>
+        <span>Coming Soon</span>
+      </div>
+    </div>
+
+    <div class="join-notice">
+      Player login and match history are not connected in this demo version.
     </div>
 
   </section>
@@ -792,33 +844,55 @@
     <button class="nav-item" id="navMatches"
       onclick="openMode('All Matches')">
       <span class="nav-icon">🏆</span>
-      <span>Matches</span>
+      <span>My Matches</span>
     </button>
 
-    <button class="nav-item" id="navHelp"
-      onclick="showPage('helpPage')">
-      <span class="nav-icon">☏</span>
-      <span>Support</span>
+    <button class="nav-item" id="navProfile"
+      onclick="showPage('profilePage')">
+      <span class="nav-icon">👤</span>
+      <span>Profile</span>
     </button>
 
   </nav>
 
 </div>
-
 <script>
-  // ================================
-// AXON TOURNAMENT APP
-// PART 4/4
-// ================================
-
 const modes = [
-  { name: "Full Map", icon: "🗺️", tag: "BATTLE ROYALE" },
-  { name: "Clash Squad 4v4", icon: "⚔️", tag: "TEAM BATTLE" },
-  { name: "Lone Wolf 1v1", icon: "🐺", tag: "1 VS 1" },
-  { name: "Only Head 1v1", icon: "🎯", tag: "HEADSHOT" },
-  { name: "Lone Wolf 2v2", icon: "🔥", tag: "2 VS 2" },
-  { name: "Only Head 2v2", icon: "💀", tag: "HEADSHOT DUO" },
-  { name: "Free Matches", icon: "🎁", tag: "FREE ENTRY" }
+  {
+    name: "Full Map",
+    image: "./Full%20Map.png",
+    tag: "BATTLE ROYALE"
+  },
+  {
+    name: "Clash Squad 4v4",
+    image: "./Clash%20Squad%204v4.png",
+    tag: "TEAM BATTLE"
+  },
+  {
+    name: "Lone Wolf 1v1",
+    image: "./Lone%20Wolf%201v1.png",
+    tag: "1 VS 1"
+  },
+  {
+    name: "Only Head 1v1",
+    image: "./Only%20Head%201v1.png",
+    tag: "HEADSHOT"
+  },
+  {
+    name: "Lone Wolf 2v2",
+    image: "./Lone%20Wolf%202v2.png",
+    tag: "2 VS 2"
+  },
+  {
+    name: "Only Head 2v2",
+    image: "./Only%20Head%202v2.jpg",
+    tag: "HEADSHOT DUO"
+  },
+  {
+    name: "Free Matches",
+    image: "./Free%20matches.jpg",
+    tag: "FREE ENTRY"
+  }
 ];
 
 const templates = [
@@ -829,7 +903,6 @@ const templates = [
     prize: 500,
     perKill: 9,
     entry: 10,
-    type: "Paid",
     image: "./Solo%20turnament.png",
     description:
       "Compete against other players and show your skills. Hacking, scripts and unfair play are not allowed."
@@ -841,7 +914,6 @@ const templates = [
     prize: 300,
     perKill: 5,
     entry: 10,
-    type: "Paid",
     image: "./Survival.png",
     description:
       "Play strategically and try to win the tournament. Follow the match rules and respect other players."
@@ -853,14 +925,12 @@ const templates = [
     prize: 300,
     perKill: 10,
     entry: 10,
-    type: "Paid",
     image: "./Only%20kill.png",
     description:
       "A skill-based challenge for Free Fire players. Cheating, scripts and teaming are not allowed."
   }
 ];
 
-// Generate 3 demo tournaments for each of the 7 modes.
 const tournaments = [];
 
 modes.forEach((mode, modeIndex) => {
@@ -905,7 +975,8 @@ function goSlide(index) {
   if (!totalSlides) return;
 
   currentSlide = (index + totalSlides) % totalSlides;
-  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  track.style.transform =
+    `translateX(-${currentSlide * 100}%)`;
 
   dots.forEach((dot, i) => {
     dot.classList.toggle("active", i === currentSlide);
@@ -932,10 +1003,13 @@ function showPage(pageId) {
 
   if (pageId === "homePage") {
     document.getElementById("navHome").classList.add("active");
-  } else if (pageId === "matchesPage" || pageId === "detailsPage") {
+  } else if (
+    pageId === "matchesPage" ||
+    pageId === "detailsPage"
+  ) {
     document.getElementById("navMatches").classList.add("active");
-  } else if (pageId === "helpPage") {
-    document.getElementById("navHelp").classList.add("active");
+  } else if (pageId === "profilePage") {
+    document.getElementById("navProfile").classList.add("active");
   }
 
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -946,12 +1020,21 @@ function renderModes() {
   if (!grid) return;
 
   grid.innerHTML = modes.map(mode => `
-    <button class="mode-card" onclick="openMode('${mode.name}')">
-      <span class="mode-icon">${mode.icon}</span>
+    <button class="mode-card"
+      onclick="openMode('${mode.name}')">
+
+      <img
+        class="mode-icon"
+        src="${mode.image}"
+        alt="${mode.name}"
+        onerror="this.style.display='none';"
+      >
+
       <div class="mode-name">
         ${mode.name}
         <span class="arrow">›</span>
       </div>
+
       <span class="mode-tag">${mode.tag}</span>
     </button>
   `).join("");
@@ -960,6 +1043,14 @@ function renderModes() {
 function openMode(mode) {
   selectedMode = mode;
   selectedStatus = "Upcoming";
+
+  document.querySelectorAll(".status-tab").forEach(tab => {
+    tab.classList.toggle(
+      "active",
+      tab.textContent.trim() === "Upcoming"
+    );
+  });
+
   showPage("matchesPage");
   renderTournaments();
 }
@@ -971,15 +1062,7 @@ function selectStatus(status, button) {
     tab.classList.remove("active");
   });
 
-  if (button) {
-    button.classList.add("active");
-  } else {
-    document.querySelectorAll(".status-tab").forEach(tab => {
-      if (tab.textContent.trim() === status) {
-        tab.classList.add("active");
-      }
-    });
-  }
+  if (button) button.classList.add("active");
 
   renderTournaments();
 }
@@ -997,7 +1080,8 @@ function renderTournaments() {
       selectedMode === "All Matches" ||
       tournament.mode === selectedMode;
 
-    return modeMatches && tournament.status === selectedStatus;
+    return modeMatches &&
+      tournament.status === selectedStatus;
   });
 
   if (matching.length === 0) {
@@ -1018,7 +1102,8 @@ function renderTournaments() {
         <img
           src="${tournament.image}"
           alt="${tournament.title}"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          onerror="this.style.display='none';
+            this.nextElementSibling.style.display='flex';"
         >
 
         <div class="image-placeholder" style="display:none">
@@ -1057,7 +1142,9 @@ function renderTournaments() {
           <div class="reward-box">
             <div class="reward-label">ENTRY FEE</div>
             <div class="reward-value">
-              ${tournament.entry === 0 ? "FREE" : "₹" + tournament.entry}
+              ${tournament.entry === 0
+                ? "FREE"
+                : "₹" + tournament.entry}
             </div>
           </div>
         </div>
@@ -1070,16 +1157,19 @@ function renderTournaments() {
 
           <button class="btn btn-primary"
             onclick="joinTournament('${tournament.id}')">
-            ${tournament.status === "Completed" ? "View Result" : "Join Now"}
+            Join Now
           </button>
         </div>
       </div>
+
     </article>
   `).join("");
 }
-
 function showTournamentDetails(id) {
-  const tournament = tournaments.find(item => item.id === String(id));
+  const tournament = tournaments.find(
+    item => item.id === String(id)
+  );
+
   if (!tournament) return;
 
   currentTournamentId = tournament.id;
@@ -1128,7 +1218,11 @@ function showTournamentDetails(id) {
 
       <div class="detail-row">
         <span>Entry Fee</span>
-        <span>${tournament.entry === 0 ? "FREE" : "₹" + tournament.entry}</span>
+        <span>
+          ${tournament.entry === 0
+            ? "FREE"
+            : "₹" + tournament.entry}
+        </span>
       </div>
 
       <div class="detail-row">
@@ -1145,7 +1239,9 @@ function showTournamentDetails(id) {
     <div class="detail-panel">
       <h3>📜 Rules</h3>
       <ol class="rules-list">
-        ${tournament.rules.map(rule => `<li>${rule}</li>`).join("")}
+        ${tournament.rules.map(
+          rule => `<li>${rule}</li>`
+        ).join("")}
       </ol>
     </div>
 
@@ -1169,7 +1265,10 @@ function backToMatches() {
 }
 
 function joinTournament(id) {
-  const tournament = tournaments.find(item => item.id === String(id));
+  const tournament = tournaments.find(
+    item => item.id === String(id)
+  );
+
   if (!tournament) return;
 
   if (tournament.status === "Completed") {
@@ -1182,7 +1281,9 @@ function joinTournament(id) {
     "Tournament: " + tournament.title + "\n" +
     "Mode: " + tournament.mode + "\n" +
     "Entry Fee: " +
-    (tournament.entry === 0 ? "FREE" : "₹" + tournament.entry) +
+    (tournament.entry === 0
+      ? "FREE"
+      : "₹" + tournament.entry) +
     "\n\nThis is a demo app. Registration is not connected yet."
   );
 }
@@ -1209,7 +1310,7 @@ function openSocial(platform) {
   return false;
 }
 
-// Initialize the app.
+// Initialize the app
 renderModes();
 renderTournaments();
 
