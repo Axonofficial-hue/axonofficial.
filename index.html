@@ -224,9 +224,38 @@ const tournaments = [
     entry: '10',
     status: 'Upcoming',
     type: 'Paid',
-    description: 'Solo tournament. ID level 45+ is recommended. Record your POV. Hacking or cheating is not allowed.',
-    rules: ['Use your own registered Free Fire account.', 'No hacks, scripts, teaming, or unfair play.', 'Follow the room instructions shared by the organiser.', 'Room ID and password are not available in this demo.'],
-    images: ['./Survival.png', './Only%20kill.png']
+    description: 'Solo Battle Royale tournament. ID level 40+ is recommended. Record your POV. Hacking or cheating is not allowed.',
+    rules: ['Use your own registered Free Fire account.', 'No hacks, scripts, teaming, or unfair play.', 'Follow the room instructions shared by the organiser.', 'Room ID and password will be shared by the organiser.']
+  },
+  {
+    id: '38034',
+    mode: 'Battle Royale Full Map',
+    title: 'FREE FIRE SURVIVAL TOURNAMENT',
+    image: './Survival.png',
+    date: '17 OCT 2026',
+    time: '11:00 AM',
+    prize: '300',
+    perKill: '5',
+    entry: '10',
+    status: 'Upcoming',
+    type: 'Paid',
+    description: 'Survival mode tournament. Stay alive, use smart rotations, and try to reach the final zone. Hacking, teaming, or any unfair play is not allowed.',
+    rules: ['Play to survive and reach the final zone.', 'No hacks, scripts, teaming, or unfair play.', 'Use your own registered Free Fire account.', 'Follow the room instructions shared by the organiser.']
+  },
+  {
+    id: '38035',
+    mode: 'Battle Royale Full Map',
+    title: 'FREE FIRE ONLY KILLS TOURNAMENT',
+    image: './Only%20kill.png',
+    date: '18 OCT 2026',
+    time: '12:00 PM',
+    prize: '300',
+    perKill: '10',
+    entry: '10',
+    status: 'Upcoming',
+    type: 'Paid',
+    description: 'Only Kills tournament. Focus on getting eliminations and scoring as many kills as possible. Hacking, scripts, and teaming are not allowed.',
+    rules: ['Scoring is focused on kills.', 'No hacks, scripts, teaming, or unfair play.', 'Use your own registered Free Fire account.', 'Follow the room instructions shared by the organiser.']
   }
 ];
 
@@ -357,9 +386,6 @@ function showTournamentDetails(id) {
       <div class="detail-item"><strong>Entry Fee</strong>🪙 ${t.entry}</div>
       <div class="detail-item"><strong>Rules</strong>${t.rules.map(rule => '• ' + rule).join('<br>')}</div>
       <div class="detail-item"><strong>About this tournament</strong>${t.description}</div>
-    </div>
-    <div class="detail-images">
-      ${t.images.map(src => `<img src="${src}" alt="Tournament rule image" onerror="detailImageError(this)">`).join('')}
     </div>
     <div class="tournament-actions" style="margin-top:18px">
       <button class="action-btn join-btn" onclick="joinTournament('${t.id}')">Join</button>
