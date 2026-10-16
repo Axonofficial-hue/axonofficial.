@@ -1,933 +1,955 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AXON Tournament App</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    :root {
-      --bg: #080910;
-      --card: #121421;
-      --purple: #8b5cf6;
-      --purple-light: #a78bfa;
-      --yellow: #ffd43b;
-      --white: #ffffff;
-      --gray: #a1a1b5;
-      --border: #292b3d;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--white);
-      font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
-    }
-
-    button {
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 600px;
-      min-height: 100vh;
-      margin: auto;
-      padding-bottom: 85px;
-      overflow: hidden;
-      background:
-        radial-gradient(ellipse at top, #20113e 0%, transparent 45%),
-        var(--bg);
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 17px 16px;
-      background: rgba(8, 9, 16, 0.95);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .brand {
-      min-width: 0;
-    }
-
-    .axon-logo {
-      display: block;
-      max-width: 100%;
-      height: auto;
-    }
-
-    .tagline {
-      font-size: 10px;
-      color: var(--gray);
-      letter-spacing: 2px;
-      margin-top: 3px;
-    }
-
-    .header-badge {
-      background: #251743;
-      color: var(--purple-light);
-      border: 1px solid #5b3b91;
-      border-radius: 20px;
-      padding: 7px 11px;
-      font-size: 11px;
-      font-weight: bold;
-    }
-
-    .announcement {
-      overflow: hidden;
-      white-space: nowrap;
-      background: #171126;
-      border-bottom: 1px solid #39265a;
-      padding: 9px 0;
-      color: var(--yellow);
-      font-size: 11px;
-      font-weight: bold;
-    }
-
-    .announcement span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scrollAnnouncement 18s linear infinite;
-    }
-
-    @keyframes scrollAnnouncement {
-      from { transform: translateX(0); }
-      to { transform: translateX(-100%); }
-    }
-
-    .page {
-      display: none;
-      padding: 16px;
-      animation: fadeIn 0.25s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(5px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .section-title {
-      font-size: 21px;
-      font-weight: 900;
-      margin: 8px 0 5px;
-    }
-
-    .section-subtitle {
-      color: var(--gray);
-      font-size: 12px;
-      line-height: 1.6;
-      margin-bottom: 17px;
-    }
-
-    .banner {
-      position: relative;
-      width: 100%;
-      height: 180px;
-      overflow: hidden;
-      border-radius: 15px;
-      margin-bottom: 23px;
-      background: linear-gradient(135deg, #30145b, #10101d 65%, #46215f);
-      border: 1px solid #56337e;
-    }
-
-    .banner-track {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.45s ease;
-    }
-
-    .banner-slide {
-      flex: 0 0 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .banner-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .banner-dots {
-      position: absolute;
-      bottom: 11px;
-      right: 14px;
-      display: flex;
-      gap: 6px;
-    }
-
-    .banner-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #777;
-      border: none;
-    }
-
-    .banner-dot.active {
-      width: 20px;
-      border-radius: 5px;
-      background: var(--yellow);
-    }
-
-    .mode-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 25px;
-    }
-
-    .mode-card {
-      text-align: left;
-      position: relative;
-      min-height: 115px;
-      padding: 15px 12px;
-      border-radius: 13px;
-      background: linear-gradient(145deg, #191a2b, #10111b);
-      border: 1px solid var(--border);
-      color: var(--white);
-      transition: 0.2s;
-      overflow: hidden;
-    }
-
-    .mode-card:active {
-      transform: scale(0.97);
-      border-color: var(--purple);
-    }
-
-    .mode-icon {
-      display: block;
-      width: 100%;
-      height: 70px;
-      object-fit: contain;
-      margin-bottom: 10px;
-    }
-
-    .mode-name {
-      font-size: 13px;
-      font-weight: 800;
-      line-height: 1.4;
-      padding-right: 12px;
-    }
-
-    .mode-name .arrow {
-      color: var(--yellow);
-      position: absolute;
-      right: 12px;
-      bottom: 13px;
-      font-size: 20px;
-    }
-
-    .mode-tag {
-      display: inline-block;
-      color: var(--purple-light);
-      background: #281d43;
-      border-radius: 4px;
-      font-size: 9px;
-      padding: 4px 6px;
-      margin-top: 8px;
-    }
-
-    .match-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin: 15px 0;
-    }
-
-    .back-button {
-      background: #202132;
-      border: 1px solid var(--border);
-      color: white;
-      border-radius: 8px;
-      padding: 9px 12px;
-      font-size: 12px;
-    }
-
-    .status-tabs {
-      display: flex;
-      gap: 8px;
-      margin: 16px 0;
-    }
-
-    .status-tab {
-      flex: 1;
-      padding: 11px 5px;
-      border-radius: 9px;
-      background: #171825;
-      color: var(--gray);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .status-tab.active {
-      background: #38215c;
-      color: white;
-      border-color: var(--purple);
-    }
-
-    .tournament-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .tournament-card {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 14px;
-    }
-
-    .tournament-image {
-      position: relative;
-      height: 175px;
-      background: linear-gradient(135deg, #352052, #11131f);
-      overflow: hidden;
-    }
-
-    .tournament-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .image-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 8px;
-      color: #d8c8ff;
-      background: linear-gradient(135deg, #30204d, #141522);
-      font-weight: bold;
-    }
-
-    .image-placeholder span {
-      font-size: 38px;
-    }
-
-    .tournament-status {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      padding: 6px 10px;
-      border-radius: 6px;
-      background: #176b45;
-      color: white;
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    .tournament-status.completed {
-      background: #49495a;
-    }
-
-    .tournament-content {
-      padding: 14px;
-    }
-
-    .tournament-mode {
-      color: var(--purple-light);
-      font-size: 10px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 7px;
-    }
-
-    .tournament-title {
-      font-size: 16px;
-      font-weight: 900;
-      line-height: 1.4;
-      margin-bottom: 12px;
-    }
-
-    .tournament-date {
-      color: var(--gray);
-      font-size: 11px;
-      line-height: 1.8;
-      margin-bottom: 13px;
-    }
-
-    .reward-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .reward-box {
-      text-align: center;
-      padding: 10px 5px;
-      background: #1b1c2c;
-      border: 1px solid #292b40;
-      border-radius: 8px;
-    }
-
-    .reward-label {
-      color: var(--gray);
-      font-size: 9px;
-      margin-bottom: 6px;
-    }
-
-    .reward-value {
-      color: var(--yellow);
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .reward-value small {
-      font-size: 9px;
-      color: var(--gray);
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 9px;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 12px 8px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      border: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #9b6aff, #7138d5);
-      color: white;
-    }
-
-    .btn-secondary {
-      background: #222337;
-      color: white;
-      border: 1px solid #393b52;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 45px 15px;
-      border-radius: 12px;
-      border: 1px dashed #34354b;
-      color: var(--gray);
-      line-height: 1.8;
-    }
-
-    .empty-state .empty-icon {
-      font-size: 38px;
-      margin-bottom: 10px;
-    }
-
-    .detail-banner {
-      width: 100%;
-      height: 190px;
-      border-radius: 13px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #352052, #11131f);
-      margin: 16px 0;
-    }
-
-    .detail-banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .detail-panel {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 14px 0;
-    }
-
-    .detail-panel h3 {
-      font-size: 15px;
-      margin-bottom: 12px;
-    }
-
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 11px 0;
-      border-bottom: 1px solid #282a3b;
-      font-size: 12px;
-    }
-
-    .detail-row:last-child {
-      border-bottom: none;
-    }
-
-    .detail-row span:first-child {
-      color: var(--gray);
-    }
-
-    .detail-row span:last-child {
-      text-align: right;
-      font-weight: bold;
-    }
-
-    .rules-list {
-      padding-left: 19px;
-      color: #d4d3e0;
-      font-size: 12px;
-      line-height: 1.9;
-    }
-
-    .detail-description {
-      color: #d4d3e0;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    .join-notice {
-      background: #211a37;
-      border: 1px solid #50367b;
-      padding: 12px;
-      border-radius: 9px;
-      color: #e1d5ff;
-      font-size: 12px;
-      line-height: 1.7;
-      margin: 14px 0;
-    }
-
-    .social-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 15px;
-    }
-
-    .social-card {
-      background: #171825;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 10px;
-      text-align: center;
-      color: white;
-      text-decoration: none;
-    }
-
-    .social-card .social-icon {
-      font-size: 27px;
-      margin-bottom: 9px;
-    }
-
-    .social-card h3 {
-      font-size: 13px;
-      margin-bottom: 5px;
-    }
-
-    .social-card p {
-      color: var(--gray);
-      font-size: 10px;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      z-index: 100;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      justify-content: space-around;
-      background: rgba(12, 13, 23, 0.97);
-      backdrop-filter: blur(15px);
-      border-top: 1px solid var(--border);
-      padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
-    }
-
-    .nav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      border: none;
-      background: transparent;
-      color: #88899e;
-      font-size: 10px;
-      padding: 3px;
-    }
-
-    .nav-item .nav-icon {
-      font-size: 20px;
-    }
-
-    .nav-item.active {
-      color: var(--purple-light);
-    }
-
-    .primary-wide {
-      width: 100%;
-      margin-top: 12px;
-      padding: 14px;
-      border: none;
-      border-radius: 9px;
-      color: white;
-      background: linear-gradient(135deg, #9b6aff, #7138d5);
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .footer {
-      padding: 20px 10px;
-      text-align: center;
-      color: #77788e;
-      font-size: 10px;
-      line-height: 1.8;
-    }
-
-    @media (max-width: 360px) {
-      .mode-card {
-        padding: 12px 9px;
-      }
-
-      .mode-name {
-        font-size: 12px;
-      }
-
-      .tournament-image {
-        height: 150px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXON Tournament App</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --bg: #080910;
+  --card: #121421;
+  --purple: #8b5cf6;
+  --purple-light: #a78bfa;
+  --yellow: #ffd43b;
+  --white: #ffffff;
+  --gray: #a1a1b5;
+  --border: #292b3d;
+}
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+button, input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  width: 100%;
+  max-width: 600px;
+  min-height: 100vh;
+  margin: auto;
+  padding-bottom: 85px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at top, #20113e 0%, transparent 45%),
+    var(--bg);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  min-height: 78px;
+  background: rgba(8, 9, 16, 0.97);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.axon-logo {
+  display: block;
+  width: 125px;
+  max-width: 100%;
+  height: 48px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.tagline {
+  font-size: 9px;
+  color: var(--gray);
+  letter-spacing: 1.5px;
+  margin-top: 3px;
+}
+
+.header-badge {
+  background: #251743;
+  color: var(--purple-light);
+  border: 1px solid #5b3b91;
+  border-radius: 15px;
+  padding: 9px 13px;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.announcement {
+  overflow: hidden;
+  white-space: nowrap;
+  background: #171126;
+  border-bottom: 1px solid #39265a;
+  padding: 9px 0;
+  color: var(--yellow);
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.announcement span {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scrollAnnouncement 18s linear infinite;
+}
+
+@keyframes scrollAnnouncement {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+.page {
+  display: none;
+  padding: 16px;
+  animation: fadeIn .25s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+  font-size: 21px;
+  font-weight: 900;
+  margin: 8px 0 5px;
+}
+
+.section-subtitle {
+  color: var(--gray);
+  font-size: 12px;
+  line-height: 1.6;
+  margin-bottom: 17px;
+}
+
+.banner {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 15px;
+  margin-bottom: 23px;
+  background: linear-gradient(135deg, #30145b, #10101d 65%, #46215f);
+  border: 1px solid #56337e;
+}
+
+.banner-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform .45s ease;
+}
+
+.banner-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.banner-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-dots {
+  position: absolute;
+  bottom: 11px;
+  right: 14px;
+  display: flex;
+  gap: 6px;
+}
+
+.banner-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #777;
+  border: none;
+}
+
+.banner-dot.active {
+  width: 20px;
+  border-radius: 5px;
+  background: var(--yellow);
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.mode-card {
+  text-align: left;
+  position: relative;
+  min-height: 115px;
+  padding: 15px 12px;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #191a2b, #10111b);
+  border: 1px solid var(--border);
+  color: var(--white);
+  transition: .2s;
+  overflow: hidden;
+}
+
+.mode-card:active {
+  transform: scale(.97);
+  border-color: var(--purple);
+}
+
+.mode-icon {
+  display: block;
+  width: 100%;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.mode-name {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+  padding-right: 12px;
+}
+
+.mode-name .arrow {
+  color: var(--yellow);
+  position: absolute;
+  right: 12px;
+  bottom: 13px;
+  font-size: 20px;
+}
+
+.mode-tag {
+  display: inline-block;
+  color: var(--purple-light);
+  background: #281d43;
+  border-radius: 4px;
+  font-size: 9px;
+  padding: 4px 6px;
+  margin-top: 8px;
+}
+
+.match-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.back-button {
+  background: #202132;
+  border: 1px solid var(--border);
+  color: white;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+}
+
+.status-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.status-tab {
+  flex: 1;
+  padding: 11px 5px;
+  border-radius: 9px;
+  background: #171825;
+  color: var(--gray);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-tab.active {
+  background: #38215c;
+  color: white;
+  border-color: var(--purple);
+}
+
+.tournament-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tournament-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 14px;
+}
+
+.tournament-image {
+  position: relative;
+  height: 175px;
+  background: linear-gradient(135deg, #352052, #11131f);
+  overflow: hidden;
+}
+
+.tournament-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: #d8c8ff;
+  background: linear-gradient(135deg, #30204d, #141522);
+  font-weight: bold;
+}
+
+.image-placeholder span {
+  font-size: 38px;
+}
+
+.tournament-status {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #176b45;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.tournament-status.completed {
+  background: #49495a;
+}
+
+.tournament-content {
+  padding: 14px;
+}
+
+.tournament-mode {
+  color: var(--purple-light);
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 7px;
+}
+
+.tournament-title {
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.tournament-date {
+  color: var(--gray);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-bottom: 13px;
+}
+
+.reward-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.reward-box {
+  text-align: center;
+  padding: 10px 5px;
+  background: #1b1c2c;
+  border: 1px solid #292b40;
+  border-radius: 8px;
+}
+
+.reward-label {
+  color: var(--gray);
+  font-size: 9px;
+  margin-bottom: 6px;
+}
+
+.reward-value {
+  color: var(--yellow);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.card-actions {
+  display: flex;
+  gap: 9px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #9b6aff, #7138d5);
+  color: white;
+}
+
+.btn-secondary {
+  background: #222337;
+  color: white;
+  border: 1px solid #393b52;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 35px 15px;
+  border-radius: 12px;
+  border: 1px dashed #34354b;
+  color: var(--gray);
+  line-height: 1.8;
+}
+
+.empty-state .empty-icon {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.detail-banner {
+  width: 100%;
+  height: 190px;
+  border-radius: 13px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #352052, #11131f);
+  margin: 16px 0;
+}
+
+.detail-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+  margin: 14px 0;
+}
+
+.detail-panel h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 11px 0;
+  border-bottom: 1px solid #282a3b;
+  font-size: 12px;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row span:first-child {
+  color: var(--gray);
+}
+
+.detail-row span:last-child {
+  text-align: right;
+  font-weight: bold;
+}
+
+.rules-list {
+  padding-left: 19px;
+  color: #d4d3e0;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.detail-description {
+  color: #d4d3e0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.join-notice {
+  background: #211a37;
+  border: 1px solid #50367b;
+  padding: 12px;
+  border-radius: 9px;
+  color: #e1d5ff;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 14px 0;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.social-card {
+  display: block;
+  background: #171825;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 10px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+}
+
+.social-icon {
+  font-size: 27px;
+  margin-bottom: 9px;
+}
+
+.social-card h3 {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.social-card p {
+  color: var(--gray);
+  font-size: 10px;
+}
+
+.social-home {
+  margin: 15px 0 5px;
+}
+
+.profile-box {
+  background: #151911;
+  border: 1px solid #45452d;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 15px 0;
+}
+
+.profile-heading {
+  color: #f4cb45;
+  font-size: 23px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.profile-field {
+  width: 100%;
+  background: #030403;
+  border: 1px solid #49432a;
+  color: white;
+  border-radius: 14px;
+  padding: 17px 15px;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.profile-field::placeholder {
+  color: #a1a1b5;
+}
+
+.profile-action {
+  width: 100%;
+  border: none;
+  border-radius: 30px;
+  padding: 16px 10px;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #ffdc4a, #e8ad13);
+  color: #080808;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.profile-menu button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  padding: 16px 13px;
+  border-radius: 13px;
+  background: #10130f;
+  border: 1px solid #343727;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.profile-menu .menu-icon {
+  color: #ffd43b;
+  font-size: 22px;
+  width: 28px;
+  text-align: center;
+}
+
+.profile-menu .menu-arrow {
+  margin-left: auto;
+  color: #9c9caa;
+  font-size: 22px;
+}
+
+.primary-wide {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  border: none;
+  border-radius: 9px;
+  color: white;
+  background: linear-gradient(135deg, #9b6aff, #7138d5);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.footer {
+  padding: 20px 10px;
+  text-align: center;
+  color: #77788e;
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 100;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-around;
+  background: rgba(12, 13, 23, .97);
+  backdrop-filter: blur(15px);
+  border-top: 1px solid var(--border);
+  padding: 10px 5px calc(10px + env(safe-area-inset-bottom));
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: #88899e;
+  font-size: 10px;
+  padding: 3px;
+}
+
+.nav-icon {
+  font-size: 20px;
+}
+
+.nav-item.active {
+  color: var(--purple-light);
+}
+
+@media (max-width: 360px) {
+  .mode-card {
+    padding: 12px 9px;
+  }
+
+  .mode-name {
+    font-size: 12px;
+  }
+
+  .tournament-image {
+    height: 150px;
+  }
+
+  .profile-box {
+    padding: 15px;
+  }
+}
+</style>
 </head>
-<body>
 
+<body>
 <div class="app">
 
-  <!-- HEADER -->
-  <header class="topbar">
-    <div class="brand">
-      <img src="./Logo.png" alt="AXON Logo" class="axon-logo">
-      <div class="tagline">FREE FIRE TOURNAMENTS</div>
+<header class="topbar">
+  <div class="brand">
+    <img src="./Logo.png" alt="AXON Logo" class="axon-logo">
+    <div class="tagline">FREE FIRE TOURNAMENTS</div>
+  </div>
+  <button class="header-badge" onclick="showPage('helpPage')">☎ HELP</button>
+</header>
+
+<div class="announcement">
+  <span>🔥 WELCOME TO AXON TOURNAMENTS • CHOOSE YOUR MODE • JOIN THE BATTLE • PLAY FAIR • 🔥</span>
+</div>
+
+<section id="homePage" class="page active">
+  <div class="banner">
+    <div class="banner-track" id="bannerTrack">
+      <div class="banner-slide"><img src="./Banner1.png" alt="Banner 1"></div>
+      <div class="banner-slide"><img src="./Banner2.png" alt="Banner 2"></div>
+      <div class="banner-slide"><img src="./Banner3.png" alt="Banner 3"></div>
     </div>
-
-    <button class="header-badge" onclick="showPage('helpPage')">
-      ☎ HELP
-    </button>
-  </header>
-
-  <!-- SCROLLING ANNOUNCEMENT -->
-  <div class="announcement">
-    <span>🔥 WELCOME TO AXON TOURNAMENTS • CHOOSE YOUR MODE • JOIN THE BATTLE • PLAY FAIR • 🔥</span>
+    <div class="banner-dots">
+      <button class="banner-dot active" onclick="goSlide(0)"></button>
+      <button class="banner-dot" onclick="goSlide(1)"></button>
+      <button class="banner-dot" onclick="goSlide(2)"></button>
+    </div>
   </div>
 
-  <!-- HOME PAGE -->
-  <section id="homePage" class="page active">
+  <h2 class="section-title">Choose Your Mode</h2>
+  <p class="section-subtitle">Select a game mode to explore tournaments.</p>
+  <div class="mode-grid" id="homeModeGrid"></div>
 
-    <!-- BANNER SLIDER -->
-    <div class="banner">
-      <div class="banner-track" id="bannerTrack">
+  <h2 class="section-title">Follow AXON</h2>
+  <p class="section-subtitle">Stay updated with our social channels.</p>
 
-        <div class="banner-slide">
-          <img src="./Banner1.png" alt="AXON Tournament Banner 1">
-        </div>
+  <div class="social-grid social-home">
+    <a class="social-card" href="#" onclick="return openSocial('instagram')">
+      <div class="social-icon">📸</div>
+      <h3>Instagram</h3>
+      <p>Tournament updates</p>
+    </a>
+    <a class="social-card" href="#" onclick="return openSocial('youtube')">
+      <div class="social-icon">▶️</div>
+      <h3>YouTube</h3>
+      <p>Gaming content</p>
+    </a>
+    <a class="social-card" href="#" onclick="return openSocial('whatsapp')">
+      <div class="social-icon">💬</div>
+      <h3>WhatsApp</h3>
+      <p>Match updates</p>
+    </a>
+    <a class="social-card" href="#" onclick="return openSocial('telegram')">
+      <div class="social-icon">✈️</div>
+      <h3>Telegram</h3>
+      <p>Join community</p>
+    </a>
+  </div>
 
-        <div class="banner-slide">
-          <img src="./Banner2.png" alt="AXON Tournament Banner 2">
-        </div>
+  <div class="footer">AXON ESPORTS<br>Compete • Improve • Win</div>
+</section>
 
-        <div class="banner-slide">
-          <img src="./Banner3.png" alt="AXON Tournament Banner 3">
-        </div>
+<section id="matchesPage" class="page">
+  <div class="match-toolbar">
+    <button class="back-button" onclick="showPage('homePage')">← Home</button>
+    <span class="header-badge">AXON MATCHES</span>
+  </div>
 
-      </div>
+  <h2 class="section-title" id="matchesHeading">All Matches</h2>
+  <p class="section-subtitle" id="matchesSubtitle">Explore tournament information.</p>
 
-      <div class="banner-dots">
-        <button class="banner-dot active" onclick="goSlide(0)"></button>
-        <button class="banner-dot" onclick="goSlide(1)"></button>
-        <button class="banner-dot" onclick="goSlide(2)"></button>
-      </div>
-    </div>
+  <div class="status-tabs" id="matchStatusTabs">
+    <button class="status-tab active" onclick="selectStatus('Upcoming',this)">Upcoming</button>
+    <button class="status-tab" onclick="selectStatus('Completed',this)">Completed</button>
+  </div>
 
-    <h2 class="section-title">Choose Your Mode</h2>
-    <p class="section-subtitle">
-      Select a game mode to explore tournaments.
-    </p>
+  <div id="tournamentList" class="tournament-list"></div>
+</section>
 
-    <div class="mode-grid" id="homeModeGrid"></div>
+<section id="detailsPage" class="page">
+  <button class="back-button" onclick="backToMatches()">← Back to Matches</button>
+  <div id="tournamentDetails"></div>
+</section>
 
-    <div class="footer">
-      AXON ESPORTS<br>
-      Compete • Improve • Win
-    </div>
+<section id="helpPage" class="page">
+  <h2 class="section-title">Help & Support</h2>
+  <p class="section-subtitle">Need help with tournaments? Contact AXON.</p>
 
-  </section>
+  <div class="detail-panel">
+    <h3>How to Join</h3>
+    <ol class="rules-list">
+      <li>Choose your preferred game mode.</li>
+      <li>Open a tournament to view its details.</li>
+      <li>Read the rules and entry information.</li>
+      <li>Use the Join button to save it to My Matches.</li>
+    </ol>
+  </div>
 
-  <!-- MATCHES PAGE -->
-  <section id="matchesPage" class="page">
+  <div class="join-notice">
+    Demo version: registration is saved only in this browser.
+    Online registration and payments are not connected.
+  </div>
 
-    <div class="match-toolbar">
-      <button class="back-button" onclick="showPage('homePage')">
-        ← Home
-      </button>
-      <span class="header-badge">AXON MATCHES</span>
-    </div>
+  <h3 class="section-title">Follow AXON</h3>
+  <div class="social-grid">
+    <a class="social-card" href="#" onclick="return openSocial('instagram')">
+      <div class="social-icon">📸</div><h3>Instagram</h3><p>Tournament updates</p>
+    </a>
+    <a class="social-card" href="#" onclick="return openSocial('youtube')">
+      <div class="social-icon">▶️</div><h3>YouTube</h3><p>Gaming content</p>
+    </a>
+    <a class="social-card" href="#" onclick="return openSocial('whatsapp')">
+      <div class="social-icon">💬</div><h3>WhatsApp</h3><p>Match updates</p>
+    </a>
+    <a class="social-card" href="#" onclick="return openSocial('telegram')">
+      <div class="social-icon">✈️</div><h3>Telegram</h3><p>Join community</p>
+    </a>
+  </div>
+</section>
 
-    <h2 class="section-title" id="matchesHeading">All Matches</h2>
+<section id="profilePage" class="page">
+  <div class="profile-box">
+    <h2 class="profile-heading">Account</h2>
 
-    <p class="section-subtitle">
-      Explore available tournament information.
-    </p>
+    <input class="profile-field" id="playerName"
+      type="text" placeholder="Player Name" autocomplete="name">
 
-    <div class="status-tabs">
-      <button class="status-tab active"
-        onclick="selectStatus('Upcoming', this)">
-        Upcoming
-      </button>
+    <input class="profile-field" id="playerEmail"
+      type="email" placeholder="Email Address" autocomplete="email">
 
-      <button class="status-tab"
-        onclick="selectStatus('Completed', this)">
-        Completed
-      </button>
-    </div>
+    <input class="profile-field" id="playerPhone"
+      type="tel" placeholder="Mobile Number" autocomplete="tel">
+  </div>
 
-    <div id="tournamentList" class="tournament-list"></div>
+  <div class="profile-box">
+    <h2 class="profile-heading">Change Password</h2>
 
-  </section>
+    <input class="profile-field" id="currentPassword"
+      type="password" placeholder="Current Password" autocomplete="current-password">
 
-  <!-- TOURNAMENT DETAILS PAGE -->
-  <section id="detailsPage" class="page">
+    <input class="profile-field" id="newPassword"
+      type="password" placeholder="New Password" autocomplete="new-password">
 
-    <button class="back-button" onclick="backToMatches()">
-      ← Back to Matches
+    <button class="profile-action" onclick="changePassword()">
+      Change Password
     </button>
 
-    <div id="tournamentDetails"></div>
-
-  </section>
-
-  <!-- HELP PAGE -->
-  <section id="helpPage" class="page">
-
-    <h2 class="section-title">Help & Support</h2>
-
-    <p class="section-subtitle">
-      Need help with tournaments? Contact us through your official social channels.
+    <p class="section-subtitle" style="margin-top:12px;margin-bottom:0">
+      Demo only: password changes are not connected to a real account.
     </p>
+  </div>
 
-    <div class="detail-panel">
-      <h3>How to Join</h3>
-
-      <ol class="rules-list">
-        <li>Choose your preferred game mode.</li>
-        <li>Open a tournament to view its details.</li>
-        <li>Read the rules and entry information.</li>
-        <li>Use the Join button for registration instructions.</li>
-      </ol>
-    </div>
-
-    <div class="join-notice">
-      Demo version: tournament listings are sample data.
-      Registration and payments are not processed by this demo app.
-    </div>
-
-    <h3 class="section-title">Follow AXON</h3>
-
-    <div class="social-grid">
-
-      <a class="social-card" href="#"
-        onclick="return openSocial('instagram')">
-        <div class="social-icon">📸</div>
-        <h3>Instagram</h3>
-        <p>Follow tournament updates</p>
-      </a>
-
-      <a class="social-card" href="#"
-        onclick="return openSocial('youtube')">
-        <div class="social-icon">▶️</div>
-        <h3>YouTube</h3>
-        <p>Watch gaming content</p>
-      </a>
-
-      <a class="social-card" href="#"
-        onclick="return openSocial('whatsapp')">
-        <div class="social-icon">💬</div>
-        <h3>WhatsApp</h3>
-        <p>Get tournament updates</p>
-      </a>
-
-      <a class="social-card" href="#"
-        onclick="return openSocial('telegram')">
-        <div class="social-icon">✈️</div>
-        <h3>Telegram</h3>
-        <p>Join the community</p>
-      </a>
-
-    </div>
-
-    <div class="footer">
-      AXON Tournament App
-    </div>
-
-  </section>
-
-  <!-- PROFILE PAGE -->
-  <section id="profilePage" class="page">
-
-    <h2 class="section-title">My Profile</h2>
-
-    <p class="section-subtitle">
-      Your AXON tournament profile.
-    </p>
-
-    <div class="detail-panel">
-      <h3>🎮 Player Information</h3>
-
-      <div class="detail-row">
-        <span>App</span>
-        <span>AXON</span>
-      </div>
-
-      <div class="detail-row">
-        <span>Account</span>
-        <span>Guest</span>
-      </div>
-
-      <div class="detail-row">
-        <span>My Matches</span>
-        <span>Coming Soon</span>
-      </div>
-    </div>
-
-    <div class="join-notice">
-      Player login and match history are not connected in this demo version.
-    </div>
-
-  </section>
-
-  <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-nav">
-
-    <button class="nav-item active" id="navHome"
-      onclick="showPage('homePage')">
-      <span class="nav-icon">⌂</span>
-      <span>Home</span>
+  <div class="profile-menu">
+    <button onclick="profileOption('Contact Us')">
+      <span class="menu-icon">🎧</span><span>Contact Us</span><span class="menu-arrow">›</span>
     </button>
-
-    <button class="nav-item" id="navMatches"
-      onclick="openMode('All Matches')">
-      <span class="nav-icon">🏆</span>
-      <span>My Matches</span>
+    <button onclick="profileOption('FAQ')">
+      <span class="menu-icon">❔</span><span>FAQ</span><span class="menu-arrow">›</span>
     </button>
-
-    <button class="nav-item" id="navProfile"
-      onclick="showPage('profilePage')">
-      <span class="nav-icon">👤</span>
-      <span>Profile</span>
+    <button onclick="profileOption('About Us')">
+      <span class="menu-icon">ℹ️</span><span>About Us</span><span class="menu-arrow">›</span>
     </button>
+    <button onclick="profileOption('Privacy Policy')">
+      <span class="menu-icon">🛡️</span><span>Privacy Policy</span><span class="menu-arrow">›</span>
+    </button>
+    <button onclick="profileOption('Terms & Conditions')">
+      <span class="menu-icon">📄</span><span>Terms & Conditions</span><span class="menu-arrow">›</span>
+    </button>
+    <button onclick="profileOption('Fair Play Policy')">
+      <span class="menu-icon">🛡️</span><span>Fair Play Policy</span><span class="menu-arrow">›</span>
+    </button>
+    <button onclick="profileOption('Refund & Reward Policy')">
+      <span class="menu-icon">💰</span><span>Refund & Reward Policy</span><span class="menu-arrow">›</span>
+    </button>
+    <button onclick="logoutPlayer()">
+      <span class="menu-icon">⏻</span><span>Logout</span><span class="menu-arrow">›</span>
+    </button>
+  </div>
+</section>
 
-  </nav>
+<nav class="bottom-nav">
+  <button class="nav-item active" id="navHome" onclick="showPage('homePage')">
+    <span class="nav-icon">⌂</span><span>Home</span>
+  </button>
+  <button class="nav-item" id="navMatches" onclick="openMyMatches()">
+    <span class="nav-icon">🏆</span><span>My Matches</span>
+  </button>
+  <button class="nav-item" id="navProfile" onclick="showPage('profilePage')">
+    <span class="nav-icon">👤</span><span>Profile</span>
+  </button>
+</nav>
 
 </div>
+
 <script>
 const modes = [
-  {
-    name: "Full Map",
-    image: "./Full%20Map.png",
-    tag: "BATTLE ROYALE"
-  },
-  {
-    name: "Clash Squad 4v4",
-    image: "./Clash%20Squad%204v4.png",
-    tag: "TEAM BATTLE"
-  },
-  {
-    name: "Lone Wolf 1v1",
-    image: "./Lone%20Wolf%201v1.png",
-    tag: "1 VS 1"
-  },
-  {
-    name: "Only Head 1v1",
-    image: "./Only%20Head%201v1.png",
-    tag: "HEADSHOT"
-  },
-  {
-    name: "Lone Wolf 2v2",
-    image: "./Lone%20Wolf%202v2.png",
-    tag: "2 VS 2"
-  },
-  {
-    name: "Only Head 2v2",
-    image: "./Only%20Head%202v2.jpg",
-    tag: "HEADSHOT DUO"
-  },
-  {
-    name: "Free Matches",
-    image: "./Free%20matches.jpg",
-    tag: "FREE ENTRY"
-  }
+  {name:"Full Map",image:"./Full%20Map.png",tag:"BATTLE ROYALE"},
+  {name:"Clash Squad 4v4",image:"./Clash%20Squad%204v4.png",tag:"TEAM BATTLE"},
+  {name:"Lone Wolf 1v1",image:"./Lone%20Wolf%201v1.png",tag:"1 VS 1"},
+  {name:"Only Head 1v1",image:"./Only%20Head%201v1.png",tag:"HEADSHOT"},
+  {name:"Lone Wolf 2v2",image:"./Lone%20Wolf%202v2.png",tag:"2 VS 2"},
+  {name:"Only Head 2v2",image:"./Only%20Head%202v2.jpg",tag:"HEADSHOT DUO"},
+  {name:"Free Matches",image:"./Free%20matches.jpg",tag:"FREE ENTRY"}
 ];
 
 const templates = [
   {
-    title: "FREE FIRE SOLO TOURNAMENT",
-    date: "20 OCT 2026",
-    time: "10:00 AM",
-    prize: 500,
-    perKill: 9,
-    entry: 10,
-    image: "./Solo%20turnament.png",
-    description:
-      "Compete against other players and show your skills. Hacking, scripts and unfair play are not allowed."
+    title:"FREE FIRE SOLO TOURNAMENT",
+    date:"20 OCT 2026",
+    time:"10:00 AM",
+    prize:500,
+    perKill:9,
+    entry:10,
+    image:"./Solo%20turnament.png",
+    description:"Compete against other players and show your skills. Hacking, scripts and unfair play are not allowed."
   },
   {
-    title: "FREE FIRE SURVIVAL TOURNAMENT",
-    date: "21 OCT 2026",
-    time: "11:00 AM",
-    prize: 300,
-    perKill: 5,
-    entry: 10,
-    image: "./Survival.png",
-    description:
-      "Play strategically and try to win the tournament. Follow the match rules and respect other players."
+    title:"FREE FIRE SURVIVAL TOURNAMENT",
+    date:"21 OCT 2026",
+    time:"11:00 AM",
+    prize:300,
+    perKill:5,
+    entry:10,
+    image:"./Survival.png",
+    description:"Play strategically and try to win the tournament. Follow the match rules and respect other players."
   },
   {
-    title: "FREE FIRE SKILL CHALLENGE",
-    date: "22 OCT 2026",
-    time: "12:00 PM",
-    prize: 300,
-    perKill: 10,
-    entry: 10,
-    image: "./Only%20kill.png",
-    description:
-      "A skill-based challenge for Free Fire players. Cheating, scripts and teaming are not allowed."
+    title:"FREE FIRE SKILL CHALLENGE",
+    date:"22 OCT 2026",
+    time:"12:00 PM",
+    prize:300,
+    perKill:10,
+    entry:10,
+    image:"./Only%20kill.png",
+    description:"A skill-based challenge for Free Fire players. Cheating, scripts and teaming are not allowed."
   }
 ];
 
@@ -938,19 +960,19 @@ modes.forEach((mode, modeIndex) => {
     const freeMatch = mode.name === "Free Matches";
 
     tournaments.push({
-      id: String(38033 + modeIndex * 3 + templateIndex),
-      mode: mode.name,
-      title: template.title,
-      date: template.date,
-      time: template.time,
-      prize: template.prize,
-      perKill: template.perKill,
-      entry: freeMatch ? 0 : template.entry,
-      type: freeMatch ? "Free" : "Paid",
-      image: template.image,
-      status: "Upcoming",
-      description: template.description,
-      rules: [
+      id:String(38033 + modeIndex * 3 + templateIndex),
+      mode:mode.name,
+      title:template.title,
+      date:template.date,
+      time:template.time,
+      prize:template.prize,
+      perKill:template.perKill,
+      entry:freeMatch ? 0 : template.entry,
+      type:freeMatch ? "Free" : "Paid",
+      image:template.image,
+      status:"Upcoming",
+      description:template.description,
+      rules:[
         "Use only your own game account.",
         "Hacking, scripts and cheating are prohibited.",
         "Follow the tournament organiser's instructions.",
@@ -964,19 +986,28 @@ let currentSlide = 0;
 let selectedMode = "All Matches";
 let selectedStatus = "Upcoming";
 let currentTournamentId = null;
+let showingMyMatches = false;
+
+function getJoinedMatches() {
+  try {
+    return JSON.parse(localStorage.getItem("axonJoinedMatches") || "[]");
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveJoinedMatches(ids) {
+  localStorage.setItem("axonJoinedMatches", JSON.stringify(ids));
+}
 
 function goSlide(index) {
   const track = document.getElementById("bannerTrack");
   const dots = document.querySelectorAll(".banner-dot");
 
-  if (!track) return;
+  if (!track || !track.children.length) return;
 
-  const totalSlides = track.children.length;
-  if (!totalSlides) return;
-
-  currentSlide = (index + totalSlides) % totalSlides;
-  track.style.transform =
-    `translateX(-${currentSlide * 100}%)`;
+  currentSlide = (index + track.children.length) % track.children.length;
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
 
   dots.forEach((dot, i) => {
     dot.classList.toggle("active", i === currentSlide);
@@ -1003,38 +1034,23 @@ function showPage(pageId) {
 
   if (pageId === "homePage") {
     document.getElementById("navHome").classList.add("active");
-  } else if (
-    pageId === "matchesPage" ||
-    pageId === "detailsPage"
-  ) {
+  } else if (pageId === "matchesPage" || pageId === "detailsPage") {
     document.getElementById("navMatches").classList.add("active");
   } else if (pageId === "profilePage") {
     document.getElementById("navProfile").classList.add("active");
   }
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function renderModes() {
   const grid = document.getElementById("homeModeGrid");
-  if (!grid) return;
 
   grid.innerHTML = modes.map(mode => `
-    <button class="mode-card"
-      onclick="openMode('${mode.name}')">
-
-      <img
-        class="mode-icon"
-        src="${mode.image}"
-        alt="${mode.name}"
-        onerror="this.style.display='none';"
-      >
-
-      <div class="mode-name">
-        ${mode.name}
-        <span class="arrow">›</span>
-      </div>
-
+    <button class="mode-card" onclick="openMode('${mode.name}')">
+      <img class="mode-icon" src="${mode.image}" alt="${mode.name}"
+        onerror="this.style.display='none'">
+      <div class="mode-name">${mode.name}<span class="arrow">›</span></div>
       <span class="mode-tag">${mode.tag}</span>
     </button>
   `).join("");
@@ -1043,6 +1059,11 @@ function renderModes() {
 function openMode(mode) {
   selectedMode = mode;
   selectedStatus = "Upcoming";
+  showingMyMatches = false;
+
+  document.getElementById("matchStatusTabs").style.display = "flex";
+  document.getElementById("matchesSubtitle").textContent =
+    "Explore tournament information.";
 
   document.querySelectorAll(".status-tab").forEach(tab => {
     tab.classList.toggle(
@@ -1055,7 +1076,22 @@ function openMode(mode) {
   renderTournaments();
 }
 
+function openMyMatches() {
+  showingMyMatches = true;
+  selectedMode = "All Matches";
+  selectedStatus = "Upcoming";
+
+  document.getElementById("matchStatusTabs").style.display = "none";
+  document.getElementById("matchesHeading").textContent = "My Matches";
+  document.getElementById("matchesSubtitle").textContent =
+    "Only tournaments you have joined appear here.";
+
+  showPage("matchesPage");
+  renderTournaments();
+}
+
 function selectStatus(status, button) {
+  showingMyMatches = false;
   selectedStatus = status;
 
   document.querySelectorAll(".status-tab").forEach(tab => {
@@ -1073,23 +1109,39 @@ function renderTournaments() {
 
   if (!list || !heading) return;
 
-  heading.textContent = selectedMode;
+  let matching;
 
-  const matching = tournaments.filter(tournament => {
-    const modeMatches =
-      selectedMode === "All Matches" ||
-      tournament.mode === selectedMode;
+  if (showingMyMatches) {
+    const joinedIds = getJoinedMatches();
 
-    return modeMatches &&
-      tournament.status === selectedStatus;
-  });
+    matching = tournaments.filter(tournament =>
+      joinedIds.includes(tournament.id)
+    );
 
-  if (matching.length === 0) {
+    heading.textContent = "My Matches";
+  } else {
+    heading.textContent = selectedMode;
+
+    matching = tournaments.filter(tournament => {
+      const modeMatches =
+        selectedMode === "All Matches" ||
+        tournament.mode === selectedMode;
+
+      return modeMatches && tournament.status === selectedStatus;
+    });
+  }
+
+  if (!matching.length) {
     list.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">🏆</div>
-        <h3>No ${selectedStatus} Matches</h3>
-        <p>There are no tournaments in this section yet.</p>
+        <h3>${showingMyMatches ? "No Joined Matches Yet" : "No " + selectedStatus + " Matches"}</h3>
+        <p>${showingMyMatches
+          ? "Join a tournament and it will appear here."
+          : "There are no tournaments in this section yet."}</p>
+        ${showingMyMatches
+          ? '<button class="primary-wide" onclick="showPage(\\'homePage\\')">Explore Tournaments</button>'
+          : ""}
       </div>
     `;
     return;
@@ -1097,35 +1149,25 @@ function renderTournaments() {
 
   list.innerHTML = matching.map(tournament => `
     <article class="tournament-card">
-
       <div class="tournament-image">
-        <img
-          src="${tournament.image}"
-          alt="${tournament.title}"
-          onerror="this.style.display='none';
-            this.nextElementSibling.style.display='flex';"
-        >
+        <img src="${tournament.image}" alt="${tournament.title}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
 
         <div class="image-placeholder" style="display:none">
-          <span>🎮</span>
-          AXON ESPORTS
+          <span>🎮</span>AXON ESPORTS
         </div>
 
         <span class="tournament-status ${
           tournament.status === "Completed" ? "completed" : ""
-        }">
-          ${tournament.status}
-        </span>
+        }">${tournament.status}</span>
       </div>
 
       <div class="tournament-content">
         <div class="tournament-mode">${tournament.mode}</div>
-
         <h3 class="tournament-title">${tournament.title}</h3>
 
         <div class="tournament-date">
-          📅 ${tournament.date}<br>
-          ⏰ ${tournament.time}
+          📅 ${tournament.date}<br>⏰ ${tournament.time}
         </div>
 
         <div class="reward-grid">
@@ -1133,43 +1175,31 @@ function renderTournaments() {
             <div class="reward-label">PRIZE POOL</div>
             <div class="reward-value">₹${tournament.prize}</div>
           </div>
-
           <div class="reward-box">
             <div class="reward-label">PER KILL</div>
             <div class="reward-value">₹${tournament.perKill}</div>
           </div>
-
           <div class="reward-box">
             <div class="reward-label">ENTRY FEE</div>
-            <div class="reward-value">
-              ${tournament.entry === 0
-                ? "FREE"
-                : "₹" + tournament.entry}
-            </div>
+            <div class="reward-value">${tournament.entry === 0 ? "FREE" : "₹" + tournament.entry}</div>
           </div>
         </div>
 
         <div class="card-actions">
           <button class="btn btn-secondary"
-            onclick="showTournamentDetails('${tournament.id}')">
-            Details
-          </button>
+            onclick="showTournamentDetails('${tournament.id}')">Details</button>
 
-          <button class="btn btn-primary"
-            onclick="joinTournament('${tournament.id}')">
-            Join Now
-          </button>
+          ${showingMyMatches
+            ? `<button class="btn btn-primary" onclick="removeJoinedMatch('${tournament.id}')">Leave List</button>`
+            : `<button class="btn btn-primary" onclick="joinTournament('${tournament.id}')">Join Now</button>`}
         </div>
       </div>
-
     </article>
   `).join("");
 }
-function showTournamentDetails(id) {
-  const tournament = tournaments.find(
-    item => item.id === String(id)
-  );
 
+function showTournamentDetails(id) {
+  const tournament = tournaments.find(item => item.id === String(id));
   if (!tournament) return;
 
   currentTournamentId = tournament.id;
@@ -1181,54 +1211,19 @@ function showTournamentDetails(id) {
     <p class="section-subtitle">${tournament.mode}</p>
 
     <div class="detail-banner">
-      <img
-        src="${tournament.image}"
-        alt="${tournament.title}"
-        onerror="this.style.display='none';"
-      >
+      <img src="${tournament.image}" alt="${tournament.title}"
+        onerror="this.style.display='none'">
     </div>
 
     <div class="detail-panel">
       <h3>🏆 Tournament Information</h3>
-
-      <div class="detail-row">
-        <span>Game Mode</span>
-        <span>${tournament.mode}</span>
-      </div>
-
-      <div class="detail-row">
-        <span>Date</span>
-        <span>${tournament.date}</span>
-      </div>
-
-      <div class="detail-row">
-        <span>Time</span>
-        <span>${tournament.time}</span>
-      </div>
-
-      <div class="detail-row">
-        <span>Prize Pool</span>
-        <span>₹${tournament.prize}</span>
-      </div>
-
-      <div class="detail-row">
-        <span>Per Kill</span>
-        <span>₹${tournament.perKill}</span>
-      </div>
-
-      <div class="detail-row">
-        <span>Entry Fee</span>
-        <span>
-          ${tournament.entry === 0
-            ? "FREE"
-            : "₹" + tournament.entry}
-        </span>
-      </div>
-
-      <div class="detail-row">
-        <span>Status</span>
-        <span>${tournament.status}</span>
-      </div>
+      <div class="detail-row"><span>Game Mode</span><span>${tournament.mode}</span></div>
+      <div class="detail-row"><span>Date</span><span>${tournament.date}</span></div>
+      <div class="detail-row"><span>Time</span><span>${tournament.time}</span></div>
+      <div class="detail-row"><span>Prize Pool</span><span>₹${tournament.prize}</span></div>
+      <div class="detail-row"><span>Per Kill</span><span>₹${tournament.perKill}</span></div>
+      <div class="detail-row"><span>Entry Fee</span><span>${tournament.entry === 0 ? "FREE" : "₹" + tournament.entry}</span></div>
+      <div class="detail-row"><span>Status</span><span>${tournament.status}</span></div>
     </div>
 
     <div class="detail-panel">
@@ -1239,19 +1234,16 @@ function showTournamentDetails(id) {
     <div class="detail-panel">
       <h3>📜 Rules</h3>
       <ol class="rules-list">
-        ${tournament.rules.map(
-          rule => `<li>${rule}</li>`
-        ).join("")}
+        ${tournament.rules.map(rule => `<li>${rule}</li>`).join("")}
       </ol>
     </div>
 
     <div class="join-notice">
-      This is a demo tournament listing. Confirm the actual match details
-      with the organiser before participating.
+      Demo version: joining saves this match in this browser only.
+      Actual tournament registration is not connected yet.
     </div>
 
-    <button class="primary-wide"
-      onclick="joinTournament('${tournament.id}')">
+    <button class="primary-wide" onclick="joinTournament('${tournament.id}')">
       Join Tournament
     </button>
   `;
@@ -1260,15 +1252,16 @@ function showTournamentDetails(id) {
 }
 
 function backToMatches() {
-  showPage("matchesPage");
-  renderTournaments();
+  if (showingMyMatches) {
+    openMyMatches();
+  } else {
+    showPage("matchesPage");
+    renderTournaments();
+  }
 }
 
 function joinTournament(id) {
-  const tournament = tournaments.find(
-    item => item.id === String(id)
-  );
-
+  const tournament = tournaments.find(item => item.id === String(id));
   if (!tournament) return;
 
   if (tournament.status === "Completed") {
@@ -1276,16 +1269,28 @@ function joinTournament(id) {
     return;
   }
 
+  const joinedIds = getJoinedMatches();
+
+  if (!joinedIds.includes(tournament.id)) {
+    joinedIds.push(tournament.id);
+    saveJoinedMatches(joinedIds);
+  }
+
   alert(
-    "AXON Tournament Registration\n\n" +
-    "Tournament: " + tournament.title + "\n" +
-    "Mode: " + tournament.mode + "\n" +
-    "Entry Fee: " +
-    (tournament.entry === 0
-      ? "FREE"
-      : "₹" + tournament.entry) +
-    "\n\nThis is a demo app. Registration is not connected yet."
+    "Match saved to My Matches!\n\n" +
+    tournament.title +
+    "\n\nNote: This demo does not send your registration to an organiser."
   );
+
+  if (showingMyMatches) {
+    renderTournaments();
+  }
+}
+
+function removeJoinedMatch(id) {
+  const remaining = getJoinedMatches().filter(matchId => matchId !== String(id));
+  saveJoinedMatches(remaining);
+  renderTournaments();
 }
 
 function openSocial(platform) {
@@ -1299,10 +1304,7 @@ function openSocial(platform) {
   const link = socialLinks[platform];
 
   if (!link) {
-    alert(
-      "Your " + platform +
-      " link has not been added yet. Add your official link in the code first."
-    );
+    alert("The official " + platform + " link has not been added yet.");
     return false;
   }
 
@@ -1310,10 +1312,46 @@ function openSocial(platform) {
   return false;
 }
 
-// Initialize the app
+function changePassword() {
+  const current = document.getElementById("currentPassword").value;
+  const next = document.getElementById("newPassword").value;
+
+  if (!current || !next) {
+    alert("Please enter both current and new password.");
+    return;
+  }
+
+  alert("Password change is not connected to a real account yet.");
+}
+
+function profileOption(option) {
+  if (option === "Contact Us") {
+    showPage("helpPage");
+    return;
+  }
+
+  alert(option + " page is not set up yet.");
+}
+
+function logoutPlayer() {
+  alert("There is no real player login session to log out of yet.");
+}
+
+// Load profile fields saved on this browser
+function loadProfile() {
+  ["playerName", "playerEmail", "playerPhone"].forEach(id => {
+    const field = document.getElementById(id);
+    field.value = localStorage.getItem("axon_" + id) || "";
+
+    field.addEventListener("change", () => {
+      localStorage.setItem("axon_" + id, field.value);
+    });
+  });
+}
+
 renderModes();
 renderTournaments();
-
+loadProfile();
 </script>
 </body>
-</html>
+  </html>
