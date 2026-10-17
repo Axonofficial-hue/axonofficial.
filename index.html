@@ -15,9 +15,9 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html,body{background:var(--bg);color:var(--text);font-family:Roboto,Arial,sans-serif}
 body{max-width:480px;margin:0 auto;padding-bottom:84px;min-height:100vh}
 header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
-.logo{height:44px;display:flex;align-items:center}
-.logo img{height:44px}
-.logo b{font-size:26px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#fff,var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo{height:64px;display:flex;align-items:center}
+.logo img{height:64px;width:auto}
+.logo b{font-size:36px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#fff,var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
 .right{display:flex;align-items:center;gap:8px}
 .hic{width:20px;height:20px}.ic{width:26px;height:26px}.tg{width:38px;height:38px;opacity:.55}
 .help{height:40px;padding:0 12px;border-radius:12px;border:1px solid var(--purple);background:#1d1133;color:var(--gold);font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
@@ -42,9 +42,6 @@ h2+p{color:var(--mut);font-size:14px;padding:0 16px 12px}
 .mode .nm{padding:10px 6px;font-weight:900;font-size:14px;border-top:2px solid var(--gold);letter-spacing:.4px}
 .mode:active{transform:scale(.97)}
 .social{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 8px}
-.soc{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;color:#fff;text-decoration:none;font-weight:700;font-size:14px}
-.soc svg{width:28px;height:28px;flex:none}
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;background:#0f0819;border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
 nav a{flex:1;text-align:center;color:var(--mut);font-size:12px;font-weight:700}
 nav a div{height:28px;display:grid;place-items:center}
 nav a.on{color:var(--gold)}
@@ -67,11 +64,6 @@ nav a.on{color:var(--gold)}
 .row{display:flex;align-items:center;gap:8px;font-size:14px;color:#e8defa;margin:6px 0}
 .row b{color:#fff}
 .bar{height:6px;border-radius:3px;background:#2a1b45;overflow:hidden;margin-top:4px}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--gold))}
-.btns{display:flex;gap:10px;padding:0 14px 14px}
-.btn{flex:1;padding:12px;border-radius:12px;font-weight:900;font-size:14px;border:1px solid var(--purple);background:transparent;color:#fff}
-.btn.p{background:linear-gradient(90deg,var(--purple),#5b1fd0);border-color:var(--purple)}
-.btn[disabled]{opacity:.55}
 .empty{text-align:center;color:var(--mut);padding:50px 10px;font-size:14px}
 .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
 .box h5{font-size:15px;font-weight:900;color:var(--gold);margin-bottom:8px}
@@ -99,7 +91,8 @@ nav a.on{color:var(--gold)}
 .auth{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 .ab{max-width:480px;margin:0 auto;padding:18px 20px 30px}
 .ab .lg{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
-.ab .lg b{font-size:30px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#fff,var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ab .lg img{height:72px;width:auto}
+.ab .lg b{font-size:40px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#fff,var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
 .ab h2{padding:0;font-size:26px}.ab p{color:var(--mut);font-size:14px;margin:4px 0 18px}
 .ab label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
 .ab input{width:100%;padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:#fff;font-size:16px}
@@ -138,6 +131,17 @@ nav a.on{color:var(--gold)}
 .poster{aspect-ratio:auto;min-height:110px}
 .poster img{position:static;display:block;width:100%;height:auto}
 .poster .tg{position:absolute}
+
+.fh{display:flex;align-items:center;gap:12px;padding:28px 16px 6px}
+.fh i{flex:1;height:2px;background:linear-gradient(90deg,transparent,var(--gold))}
+.fh i:last-child{background:linear-gradient(270deg,transparent,var(--gold))}
+.fh h2{padding:0;font-size:24px;font-weight:900;text-transform:uppercase;white-space:nowrap;background:linear-gradient(90deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+html[lang=en] .fh h2{letter-spacing:2px}
+.fsub{color:var(--mut);font-size:14px;text-align:center;padding:2px 16px 14px}
+
+.ab p{padding:0}
+.right{flex-shrink:0}
+.logo{min-width:0}.logo img{max-width:100%;object-fit:contain}
 </style>
 </head>
 <body>
@@ -157,8 +161,8 @@ nav a.on{color:var(--gold)}
 <p data-t="gmsub">Select a mode to explore tournaments.</p>
 <div class="modes" id="modes"></div>
 
-<h2 style="padding-top:22px" data-t="fol">Follow AXON</h2>
-<p data-t="folsub">Stay updated with our social channels.</p>
+<div class="fh"><i></i><h2 data-t="fol">Follow AXON</h2><i></i></div>
+<p class="fsub" data-t="folsub">Stay updated with our social channels.</p>
 <div class="social">
   <a class="soc" href="#" data-s="ig"><svg viewBox="0 0 32 32"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".5" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="url(#ig)"/><circle cx="16" cy="16" r="6.5" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="24" cy="8" r="1.8" fill="#fff"/></svg><span data-t="ig">Instagram</span></a>
   <a class="soc" href="#" data-s="tg"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#29a9eb"/><path d="M7 15.5l17-6.5-3 14-5-3.8-2.6 2.5-.5-4.5z" fill="#fff"/></svg><span data-t="tg">Telegram</span></a>
@@ -361,13 +365,14 @@ try{user=JSON.parse(localStorage.getItem("axon_user"))}catch(e){}
 try{authIn=localStorage.getItem("axon_in")==="1"&&!!user}catch(e){}
 var au=document.getElementById("auth");
 function readF(){["a1","a2","a3","a4"].forEach(function(k){var e=document.getElementById(k);if(e)fv[k]=e.value})}
+function logoImg(){return '<img src="'+encodeURI(IMG+"Logo.png")+'" alt="AXON" onerror="this.outerHTML=\'<b>AXON</b>\'">'}
 function auth(){
  au.hidden=authIn;
  if(authIn){return}
  var l=L(),su=am==="signup";
  var f=su?'<label>'+l.nm+'</label><input id="a1" autocomplete="name"><label>'+l.fPh+'</label><input id="a2" inputmode="numeric" maxlength="10" autocomplete="tel"><label>'+l.fEm+'</label><input id="a3" type="email" autocomplete="email"><label>'+l.fPw2+'</label><input id="a4" type="password" autocomplete="new-password">'
   :'<label>'+l.fId+'</label><input id="a2" autocomplete="username"><label>'+l.fPw+'</label><input id="a4" type="password" autocomplete="current-password">';
- au.innerHTML='<div class="ab"><div class="lg"><b>AXON</b><button class="lang" data-al="1">'+l.btn+'</button></div><h2>'+(su?l.suT:l.liT)+'</h2><p>'+(su?l.suS:l.liS)+'</p>'+
+ au.innerHTML='<div class="ab"><div class="lg">'+logoImg()+'<button class="lang" data-al="1">'+l.btn+'</button></div><h2>'+(su?l.suT:l.liT)+'</h2><p>'+(su?l.suS:l.liS)+'</p>'+
   '<div class="tabs"><button class="tab'+(su?'':' on')+'" data-am="login">'+l.tLi+'</button><button class="tab'+(su?' on':'')+'" data-am="signup">'+l.tSu+'</button></div>'+f+
   '<div class="er">'+er+'</div><button class="btn p" data-go="1">'+(su?l.tSu:l.tLi)+'</button></div>';
  ["a1","a2","a3","a4"].forEach(function(k){var e=document.getElementById(k);if(e&&fv[k])e.value=fv[k]});
