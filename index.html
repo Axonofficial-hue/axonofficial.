@@ -42,6 +42,9 @@ h2+p{color:var(--mut);font-size:14px;padding:0 16px 12px}
 .mode .nm{padding:10px 6px;font-weight:900;font-size:14px;border-top:2px solid var(--gold);letter-spacing:.4px}
 .mode:active{transform:scale(.97)}
 .social{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 8px}
+.soc{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;color:#fff;text-decoration:none;font-weight:700;font-size:14px}
+.soc svg{width:28px;height:28px;flex:none}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;background:#0f0819;border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
 nav a{flex:1;text-align:center;color:var(--mut);font-size:12px;font-weight:700}
 nav a div{height:28px;display:grid;place-items:center}
 nav a.on{color:var(--gold)}
@@ -64,6 +67,11 @@ nav a.on{color:var(--gold)}
 .row{display:flex;align-items:center;gap:8px;font-size:14px;color:#e8defa;margin:6px 0}
 .row b{color:#fff}
 .bar{height:6px;border-radius:3px;background:#2a1b45;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--gold))}
+.btns{display:flex;gap:10px;padding:0 14px 14px}
+.btn{flex:1;padding:12px;border-radius:12px;font-weight:900;font-size:14px;border:1px solid var(--purple);background:transparent;color:#fff}
+.btn.p{background:linear-gradient(90deg,var(--purple),#5b1fd0);border-color:var(--purple)}
+.btn[disabled]{opacity:.55}
 .empty{text-align:center;color:var(--mut);padding:50px 10px;font-size:14px}
 .box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
 .box h5{font-size:15px;font-weight:900;color:var(--gold);margin-bottom:8px}
